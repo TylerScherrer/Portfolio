@@ -1,0 +1,3 @@
+('C:\\Users\\Tyler\\OneDrive\\Desktop\\Fitness '
+ '2.0\\build\\NewWorkoutApp\\PYZ-00.pyz',
+ [])
