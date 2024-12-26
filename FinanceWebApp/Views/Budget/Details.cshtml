@@ -1,0 +1,52 @@
+@model BudgetTracker.Models.Budget
+
+<h1>Budget Details</h1>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">@Model.Name</h3>
+        <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+        <p><strong>Date Created:</strong> @Model.DateCreated.ToShortDateString()</p>
+        <p><strong>Remaining Amount:</strong> @Model.RemainingAmount.ToString("C")</p>
+    </div>
+</div>
+
+<h2>Categories</h2>
+<a class="btn btn-primary mb-3" href="@Url.Action("Create", "Category", new { budgetId = Model.Id })">Add Category</a>
+
+@if (Model.Categories != null && Model.Categories.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Allocated Amount</th>
+                <th>Remaining Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>@category.AllocatedAmount.ToString("C")</td>
+                    <td>@(category.AllocatedAmount - (category.Transactions?.Sum(t => t.Amount) ?? 0)).ToString("C")</td>
+
+                    <td>
+                        <a class="btn btn-info" href="@Url.Action("Details", "Category", new { id = category.Id })">View</a>
+                        <a class="btn btn-warning" href="@Url.Action("Edit", "Category", new { id = category.Id })">Edit</a>
+                        <form asp-action="Delete" asp-controller="Category" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@category.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No categories available.</p>
+}
